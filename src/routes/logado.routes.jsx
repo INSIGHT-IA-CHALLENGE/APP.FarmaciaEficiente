@@ -10,6 +10,7 @@ import MedicamentosRoutes from "./medicamentos.routes";
 import { useAuth } from "../context/AuthContext";
 import ContaRoutes from "./conta.routes";
 import PostosRoutes from "./postos.routes";
+import Retiradas from "../screens/Retiradas/Retiradas";
 
 const Tab = createBottomTabNavigator();
 
@@ -45,7 +46,7 @@ const LogadoRoutes = () => {
                 auth?.user?.tipoUsuario === 'PACIENTE' &&
                 <Tab.Screen
                     name="TabEndereços"
-                    component={MedicamentosRoutes}
+                    component={Retiradas}
                     options={{
                         tabBarIcon: ({ focused }) => (
                             <View style={[getStyles(focused).tab]}>

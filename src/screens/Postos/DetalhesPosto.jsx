@@ -13,6 +13,8 @@ import { useIsFocused } from "@react-navigation/native";
 import alert from "../../components/Alert";
 import ModalStyled from "../../components/Modal";
 import InputMask from "../../components/InputMask";
+import { AntDesign } from '@expo/vector-icons';
+import { retirar } from "../../api/retirada";
 
 const DetalhesPosto = ({ navigation, route }) => {
 
@@ -24,6 +26,9 @@ const DetalhesPosto = ({ navigation, route }) => {
     const [quantidade, setQuantidade] = useState('')
     const [modalVisible, setModalVisible] = useState(false)
     const [atualizar, setAtualizar] = useState(false)
+    const [modalRetirada, setModalRetirada] = useState(false)
+    const [confirmarRetirada, setConfirmarRetirada] = useState(false)
+    const [retirada, setRetirada] = useState(null)
 
     const fetchEstoque = useCallback(async () => {
 
@@ -93,6 +98,23 @@ const DetalhesPosto = ({ navigation, route }) => {
         }
     }
 
+    const handleRetirada = async () => {
+        let data ={
+            usuario: { id: auth.user.id },
+            estoque: { id: retirada }
+        }
+
+        const response = await retirar(auth.token, data)
+
+        if (response.ok) {
+            setConfirmarRetirada(true)
+            setAtualizar(!atualizar)
+        }
+        else {
+            alert('Erro', 'Erro ao retirar medicamento!')
+        }
+    }
+
     useEffect(() => {
         fetchEstoque()
     }, [isFocus, atualizar])
@@ -148,13 +170,44 @@ const DetalhesPosto = ({ navigation, route }) => {
                                     <Feather name="trash" style={list.delete} onPress={() => handleDelete(item?.id)} />
                                 </View>
                             }
+                            {
+                                auth.user.tipoUsuario === 'PACIENTE' &&
+                                <View style={list.icons}>
+                                    <AntDesign
+                                        name="shoppingcart"
+                                        style={list.view}
+                                        onPress={() => {
+                                            setModalRetirada(true);
+                                            setConfirmarRetirada(false);
+                                            setRetirada(item.id);
+                                        }}
+                                    />
+                                </View>
+                            }
                         </View>
                     ))}
                 </View>
             </Content>
+
             <ModalStyled setVisible={setModalVisible} visible={modalVisible} title={"Editar quantidade do estoque"}>
                 <InputMask mask="numeric" value={quantidade} onChange={setQuantidade} />
                 <Button text="Atualizar" onPress={handleEditar} />
+            </ModalStyled>
+
+            <ModalStyled setVisible={setModalRetirada} visible={modalRetirada} title={"Retirada de medicamento"} >
+                {
+                    confirmarRetirada ? (
+                        <View style={styles.retirada}>
+                            <Image source={require('../../../assets/images/qrcode.png')} style={styles.imagem} />
+                            <Text style={[styles.text, {textAlign: 'center'}]}>Use o QR Code para realizar sua retirada</Text>
+                        </View>
+                    ) : (
+                        <>
+                            <Text style={styles.text}>Deseja realmente confirmar a retirada do medicamento?</Text>
+                            <Button text="Confirmar" onPress={handleRetirada} />
+                        </>
+                    )
+                }
             </ModalStyled>
         </Container>
     );
@@ -202,6 +255,15 @@ const styles = StyleSheet.create({
         color: theme.colors.black,
         fontSize: 20,
         textAlign: 'left',
+        width: '100%',
+    },
+
+    retirada: {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: 25,
         width: '100%',
     }
 })
