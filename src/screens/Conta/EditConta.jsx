@@ -51,8 +51,6 @@ const EditConta = ({ navigation }) => {
                     complemento,
                 }
             }
-            
-            console.log(data)
             const response = await atualizar(auth.token, data);
 
             if (response.ok) {
@@ -70,7 +68,6 @@ const EditConta = ({ navigation }) => {
     }
 
     const validaCampos = () => {
-        console.log(telefone)
 
         if(!nome){
             alert('Erro', 'Digite seu nome')

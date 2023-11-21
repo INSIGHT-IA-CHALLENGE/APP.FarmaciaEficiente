@@ -90,7 +90,6 @@ function AddEstoque({ navigation, route }) {
     })
 
     useEffect(() => {
-        console.log()
         fetchMedicamentos()
     }, [])
 

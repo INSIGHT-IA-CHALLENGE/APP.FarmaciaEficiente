@@ -20,7 +20,7 @@ const LogadoRoutes = () => {
 
     return (
         <Tab.Navigator
-            initialRouteName='TabAlimentos'
+            initialRouteName='TabPostos'
             screenOptions={{
                 headerShown: false,
                 tabBarShowLabel: false,
@@ -30,7 +30,7 @@ const LogadoRoutes = () => {
             {
                 auth?.user?.tipoUsuario === 'ADMIN' &&
                 <Tab.Screen
-                    name="TabEndereços"
+                    name="TabMedicamentos"
                     component={MedicamentosRoutes}
                     options={{
                         tabBarIcon: ({ focused }) => (
@@ -45,7 +45,7 @@ const LogadoRoutes = () => {
             {
                 auth?.user?.tipoUsuario === 'PACIENTE' &&
                 <Tab.Screen
-                    name="TabEndereços"
+                    name="TabRetiradas"
                     component={Retiradas}
                     options={{
                         tabBarIcon: ({ focused }) => (

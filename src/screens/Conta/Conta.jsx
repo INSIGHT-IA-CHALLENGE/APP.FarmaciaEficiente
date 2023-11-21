@@ -23,8 +23,6 @@ const Conta = () => {
             setErro(true)
         else
             setErro(false)
-
-        console.log(auth.user)
     }, [isFocus])
 
     const handleLogout = () => {

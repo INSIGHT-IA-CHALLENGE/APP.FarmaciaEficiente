@@ -78,6 +78,10 @@ function Retiradas() {
                             }
                         </View>
                 }
+                {
+                    retiradas?.length === 0
+                    && <Text style={list.empty}>Nenhuma retirada encontrada</Text>
+                }
             </Content>
 
             <ModalStyled setVisible={setModalVisible} visible={modalVisible} title={"Retirada"}>
